@@ -24,7 +24,7 @@ def _pip_import_impl(repository_ctx):
 
   # To see the output, pass: quiet=False
   result = repository_ctx.execute([
-    "python", repository_ctx.path(repository_ctx.attr._script),
+    repository_ctx.attr.interpreter, repository_ctx.path(repository_ctx.attr._script),
     "--name", repository_ctx.attr.name,
     "--input", repository_ctx.path(repository_ctx.attr.requirements),
     "--output", repository_ctx.path("requirements.bzl"),
@@ -46,6 +46,7 @@ pip_import = repository_rule(
             default = Label("//tools:piptool.par"),
             cfg = "host",
         ),
+        "interpreter": attr.string(default="python"),
     },
     implementation = _pip_import_impl,
 )
